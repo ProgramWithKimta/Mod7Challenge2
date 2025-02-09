@@ -63,18 +63,20 @@ function writeToFile(fileName, answer) {
         const username = answer.username;
         const license = answer.license;
 
-        rmTemplate = rmTemplate.replace("{{title}}", answer.title);
-        rmTemplate = rmTemplate.replace("{{description}}", answer.description);
-        rmTemplate = rmTemplate.replace("{{installation}}", answer.install);
-        rmTemplate = rmTemplate.replace("{{usage}}", answer.usage);
-        rmTemplate = rmTemplate.replace("{{contribution}}", answer.contribution);
-        rmTemplate = rmTemplate.replace("{{testing}}", answer.test);
-        rmTemplate = rmTemplate.replace("{{license}}", displayLicense(license));
-        rmTemplate = rmTemplate.replace("{{badge}}", displayLicenseBadge(license));
-        rmTemplate = rmTemplate.replace("{{github}}", displayGithubProfile(username));
-        rmTemplate = rmTemplate.replace("{{email}}", displayEmail(email));
+        rmTemplate = rmTemplate.replace("{title}", answer.title);
+        rmTemplate = rmTemplate.replace("{description}", answer.description);
+        rmTemplate = rmTemplate.replace("{installation}", answer.install);
+        rmTemplate = rmTemplate.replace("{usage}", answer.usage);
+        rmTemplate = rmTemplate.replace("{contribution}", answer.contribution);
+        rmTemplate = rmTemplate.replace("{testing}", answer.test);
+        rmTemplate = rmTemplate.replace("{license}", displayLicense(license));
+        rmTemplate = rmTemplate.replace("{badge}", displayLicenseBadge(license));
+        rmTemplate = rmTemplate.replace("{github}", displayGithubProfile(username));
+        rmTemplate = rmTemplate.replace("{email}", displayEmail(email));
 
         fs.writeFileSync(fileName, rmTemplate);
+
+        console.log('README File created!')
     }
 };
 
