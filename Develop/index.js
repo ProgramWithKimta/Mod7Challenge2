@@ -1,11 +1,12 @@
 // TODO: Include packages needed for this application
-import questions from 'inquirer';
+import inquirer from 'inquirer';
 import fs from 'fs';
+
+const fileName = process.argv[2];
 
 // TODO: Create an array of questions for user input
 // const questions = []
-questions
-    .prompt([
+const questions = [
         {
             type: 'input',
             name: 'title',
@@ -18,7 +19,7 @@ questions
         },
         {
             type: 'input',
-            name: 'install-instructions',
+            name: 'install',
             message: 'Please provide install instructions for the project',
         },
         {
@@ -28,19 +29,19 @@ questions
         },
         {
             type: 'input',
-            name: 'contribution-guidelines',
+            name: 'contribution',
             message: 'What are the contribution guidelines?',
         },
         {
             type: 'input',
-            name: 'test-instructions',
+            name: 'test',
             message: 'Please provide test instructions',
         },
         {
             type: 'checkbox',
             name: 'license',
             message: 'Pick a license.',
-            choices: ['MIT', 'Apache', 'GNU GPLv3'],
+            choices: ['MIT', 'Apache'],
         },
         {
             type: 'input',
@@ -52,15 +53,90 @@ questions
             name: 'email',
             message: ['What is the email address?'],
         },
-    ])
-    .then((responses) => {
-        console.log('responses :>> ', responses);
-        // TODO: Create a function to write README file
-        fs.writeFile('README.md', JSON.stringify(responses, null, 2), (err) => err ? console.error(err) : console.log('Answers logged to README file'))
-    });
+];
+
+// TODO: Create a function to write README file
+function writeToFile(fileName, answer) {
+    if(answer){
+        let rmTemplate = fs.readFileSync("READMETEMPLATE.md", "utf8");
+        const email = answer.email;
+        const username = answer.username;
+        const license = answer.license;
+
+        rmTemplate = rmTemplate.replace("{{title}}", answer.title);
+        rmTemplate = rmTemplate.replace("{{description}}", answer.description);
+        rmTemplate = rmTemplate.replace("{{installation}}", answer.install);
+        rmTemplate = rmTemplate.replace("{{usage}}", answer.usage);
+        rmTemplate = rmTemplate.replace("{{contribution}}", answer.contribution);
+        rmTemplate = rmTemplate.replace("{{testing}}", answer.test);
+        rmTemplate = rmTemplate.replace("{{license}}", displayLicense(license));
+        rmTemplate = rmTemplate.replace("{{badge}}", displayLicenseBadge(license));
+        rmTemplate = rmTemplate.replace("{{github}}", displayGithubProfile(username));
+        rmTemplate = rmTemplate.replace("{{email}}", displayEmail(email));
+
+        fs.writeFileSync(fileName, rmTemplate);
+    }
+};
+
+//function to display license 
+function displayLicense(license){
+    if(license == ""){
+        var licenseInfo = "";
+    }
+    licenseInfo = `This project is licensed under ${license}\n\n`;
+
+    switch (license) {
+        case 'MIT':
+            licenseInfo += `[Learn more about ${license}](https://opensource.org/license/mit)\n`;
+            break;
+          case 'Apache':
+            licenseInfo += `[Learn more about ${license}](https://opensource.org/license/apache-2-0)\n`;
+          break;
+        default:
+          licenseInfo = "";
+      }
+    return licenseInfo;
+};
+
+// display license badge
+function displayLicenseBadge(license){
+    var licenseBadge = "";
+    switch (license) {
+        case 'MIT License':
+            licenseBadge = `[![License: MIT](https://assets-global.website-files.com/5e0f1144930a8bc8aace526c/65dd9eb5aaca434fac4f1c34_License-MIT-blue.svg)](/LICENSE)`;
+            break;
+          case 'Apache License':
+            licenseBadge = `[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)`;
+          break;
+        default:
+            licenseBadge = "";
+      }
+      return licenseBadge;
+};
+
+// function to display github profile
+function displayGithubProfile(github){
+    var githubProfile = `[View my Github Profile](https://github.com/${github})`;
+
+    return githubProfile;
+};
+
+// function to display email
+function displayEmail(email){
+    var emailContent = `Questions? Contact Me! [${email}](mailto:${email})`;
+    return emailContent;
+};
 
 // TODO: Create a function to initialize app
-// function init() { }
+function init() {
+    inquirer
+    .prompt(
+        questions
+    )
+    .then((response) =>
+        writeToFile(fileName, response)
+    );
+};
 
 // Function call to initialize app
-// init();
+init();
