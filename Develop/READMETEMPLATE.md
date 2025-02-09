@@ -1,6 +1,6 @@
-# {{title}}
+# {title}
 
-{{badge}}
+{badge}
 
 ## Table of Contents
 [Description](#description)<br />
@@ -12,24 +12,24 @@
 [Questions](#questions)<br />
 
 ## Description
-{{description}}
+{description}
 
 ## Installation Instructions
-{{installation}}
+{installation}
 
 ## Usage Information
-{{usage}}
+{usage}
 
 ## Contribution Guidelines
-{{contribution}}
+{contribution}
 
 ## Test Instructions
-{{testing}}
+{testing}
 
 ## License
-{{license}}
+{license}
 
 ## Questions
-{{github}}
+{github}
 
-{{email}}
+{email}
